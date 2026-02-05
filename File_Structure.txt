@@ -1,0 +1,99 @@
+AI-Scam-Early-Detection-System/
+│
+├── README.md
+│
+├── requirements.txt
+│
+├── .env (optional)
+│
+├── data/
+│   ├── raw/
+│   │   └── scam_dataset.csv
+│   │
+│   ├── processed/
+│   │   └── cleaned_data.csv
+│   │
+│   └── external/ (optional)
+│       └── third_party_dataset.csv
+│
+├── notebooks/ (optional)
+│   └── exploratory_data_analysis.ipynb
+│
+├── src/
+│   ├── preprocessing/
+│   │   ├── text_cleaning.py
+│   │   ├── feature_extraction.py
+│   │   └── data_validation.py
+│   │
+│   ├── nlp_engine/
+│   │   ├── tokenizer.py
+│   │   ├── sentiment_analysis.py
+│   │   └── intent_detection.py
+│   │
+│   ├── models/
+│   │   ├── scam_classifier.py
+│   │   ├── risk_scoring_model.py
+│   │   └── anomaly_detection.py (optional)
+│   │
+│   ├── decision_engine/
+│   │   └── alert_decision.py
+│   │
+│   ├── feedback/
+│   │   └── user_feedback_handler.py
+│   │
+│   ├── training/
+│   │   ├── train_model.py
+│   │   └── retrain_pipeline.py
+│   │
+│   └── utils/
+│       ├── logger.py
+│       └── config_loader.py
+│
+├── api/
+│   ├── app.py
+│   ├── routes.py
+│   └── schemas.py
+│
+├── frontend/
+│   ├── public/
+│   │   └── index.html
+│   │
+│   └── src/
+│       ├── components/
+│       │   ├── AlertBox.jsx
+│       │   ├── RiskScore.jsx
+│       │   └── MessageViewer.jsx
+│       │
+│       ├── pages/
+│       │   └── Dashboard.jsx
+│       │
+│       ├── styles/
+│       │   └── main.css
+│       │
+│       └── App.js
+│
+├── tests/
+│   ├── unit/
+│   │   └── test_models.py
+│   │
+│   ├── integration/
+│   │   └── test_api.py
+│   │
+│   └── security/
+│       └── test_auth.py (optional)
+│
+├── deployment/
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── kubernetes.yaml (optional)
+│
+├── monitoring/ (optional)
+│   ├── model_metrics.json
+│   └── performance_logs.log
+│
+├── docs/
+│   ├── architecture_diagram.png
+│   ├── wireframe_mockups.pdf
+│   └── technical_design_document.docx
+│
+└── LICENSE (optional)
