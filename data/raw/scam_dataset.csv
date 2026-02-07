@@ -1,0 +1,31 @@
+message_id,message_text,label,timestamp,source
+1,"Congratulations! You've won $1000000. Click here to claim your prize now!",scam,2024-01-15 10:30:00,email
+2,"Your package delivery failed. Update your address: bit.ly/fake-link",scam,2024-01-15 11:00:00,sms
+3,"URGENT: Your account has been compromised. Verify immediately at secure-bank.xyz",scam,2024-01-15 11:30:00,email
+4,"Hey, are we still meeting for lunch at 1pm?",legitimate,2024-01-15 12:00:00,sms
+5,"Your Amazon order #12345 has been shipped and will arrive tomorrow",legitimate,2024-01-15 12:30:00,email
+6,"IRS FINAL NOTICE: You owe $5000 in back taxes. Pay now to avoid arrest!",scam,2024-01-15 13:00:00,email
+7,"Can you send me the report by end of day? Thanks!",legitimate,2024-01-15 13:30:00,email
+8,"You have inherited $5.5M from a distant relative in Nigeria. Contact us for details.",scam,2024-01-15 14:00:00,email
+9,"Your prescription is ready for pickup at CVS Pharmacy",legitimate,2024-01-15 14:30:00,sms
+10,"APPLE ALERT: Suspicious activity on your account. Confirm identity: apple-verify.com",scam,2024-01-15 15:00:00,email
+11,"Meeting rescheduled to 3pm in Conference Room B",legitimate,2024-01-15 15:30:00,email
+12,"Your credit card ending in 1234 was charged $500. If this wasn't you, call immediately!",scam,2024-01-15 16:00:00,sms
+13,"Happy Birthday! Hope you have a wonderful day!",legitimate,2024-01-15 16:30:00,sms
+14,"ACT NOW! Limited time offer - Get 90% off on all products!",scam,2024-01-15 17:00:00,email
+15,"Your flight booking confirmation for Delta Flight 123 on Feb 1st",legitimate,2024-01-15 17:30:00,email
+16,"You've been selected for a FREE iPhone 15 Pro. Just pay $4.99 shipping!",scam,2024-01-15 18:00:00,email
+17,"Reminder: Team standup meeting tomorrow at 9am",legitimate,2024-01-15 18:30:00,email
+18,"FINAL WARNING: Your Netflix account will be suspended. Update payment info now!",scam,2024-01-15 19:00:00,email
+19,"Your dentist appointment is confirmed for next Tuesday at 2pm",legitimate,2024-01-15 19:30:00,sms
+20,"BREAKING: You qualify for a $50000 government grant. No repayment required!",scam,2024-01-15 20:00:00,email
+21,"Thanks for your help with the project. Really appreciate it!",legitimate,2024-01-15 20:30:00,email
+22,"Your social security number has been suspended due to suspicious activity",scam,2024-01-15 21:00:00,sms
+23,"Grocery list: milk, eggs, bread, coffee",legitimate,2024-01-15 21:30:00,sms
+24,"URGENT: Your package is held at customs. Pay $50 fee to release: customs-pay.net",scam,2024-01-15 22:00:00,email
+25,"Movie night this Friday? Let me know if you're interested",legitimate,2024-01-15 22:30:00,sms
+26,"You've been pre-approved for a $100000 loan with 0% interest!",scam,2024-01-16 09:00:00,email
+27,"Your Uber receipt for your trip on Jan 15th: $18.50",legitimate,2024-01-16 09:30:00,email
+28,"ALERT: Your computer has been infected with a virus. Download our antivirus NOW!",scam,2024-01-16 10:00:00,email
+29,"Can you review the attached document when you get a chance?",legitimate,2024-01-16 10:30:00,email
+30,"You have won a luxury cruise! Claim your prize within 24 hours!",scam,2024-01-16 11:00:00,email
