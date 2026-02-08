@@ -11,12 +11,6 @@ import sys
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.models.scam_classifier import ScamClassifier
-from src.models.risk_scoring_model import RiskScoringModel
-from src.models.anomaly_detection import AnomalyDetector
-from src.decision_engine.alert_decision import AlertDecisionEngine
-from src.nlp_engine.sentiment_analysis import SentimentAnalyzer
-from src.nlp_engine.intent_detection import IntentDetector
 from src.utils.logger import get_logger
 from src.utils.config_loader import get_config
 
@@ -38,6 +32,15 @@ def load_models():
     global classifier, risk_model, alert_engine, anomaly_detector
     
     try:
+        # Import heavy ML modules lazily to allow starting the API
+        # without installing all ML dependencies.
+        from src.models.scam_classifier import ScamClassifier
+        from src.models.risk_scoring_model import RiskScoringModel
+        from src.models.anomaly_detection import AnomalyDetector
+        from src.decision_engine.alert_decision import AlertDecisionEngine
+        from src.nlp_engine.sentiment_analysis import SentimentAnalyzer
+        from src.nlp_engine.intent_detection import IntentDetector
+
         model_path = Path(config.MODEL_PATH) / 'scam_classifier.pkl'
         if model_path.exists():
             classifier = ScamClassifier.load(str(model_path))

@@ -1,0 +1,11 @@
+[2026-02-08 17:14:56] ERROR [__main__.error:76] Error loading models: No module named 'numpy'
+Traceback (most recent call last):
+  File "/workspaces/AI-Nexus/api/app.py", line 37, in load_models
+    from src.models.scam_classifier import ScamClassifier
+  File "/workspaces/AI-Nexus/src/models/__init__.py", line 3, in <module>
+    from .scam_classifier import ScamClassifier, train_classifier
+  File "/workspaces/AI-Nexus/src/models/scam_classifier.py", line 6, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+[2026-02-08 17:14:56] WARNING [__main__.warning:72] Running API without trained models. Some endpoints will not work.
+[2026-02-08 17:14:56] INFO [__main__.info:68] Starting API server on 0.0.0.0:5000
