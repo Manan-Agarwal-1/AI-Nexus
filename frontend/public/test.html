@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Scam Detection - Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; margin-bottom: 20px; }
+        .input-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        textarea, input, button { padding: 10px; font-size: 14px; border: 1px solid #ddd; border-radius: 4px; }
+        textarea { width: 100%; min-height: 100px; font-family: monospace; }
+        button { background: #007bff; color: white; cursor: pointer; margin-right: 10px; margin-top: 10px; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .results { margin: 20px 0; padding: 15px; background: #e8f4f8; border-left: 4px solid #0099ff; border-radius: 4px; display: none; }
+        .results.show { display: block; }
+        .results h3 { color: #333; margin-bottom: 10px; }
+        .risk-high { color: #d32f2f; font-weight: bold; }
+        .risk-low { color: #388e3c; font-weight: bold; }
+        .risk-medium { color: #f57c00; font-weight: bold; }
+        .risk-critical { color: #d32f2f; font-weight: bold; background: #ffebee; padding: 5px; }
+        .error { color: #d32f2f; padding: 10px; background: #ffebee; border-radius: 4px; margin: 10px 0; }
+        .success { color: #388e3c; padding: 10px; background: #e8f5e9; border-radius: 4px; margin: 10px 0; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; border-radius: 4px; font-size: 12px; }
+        ul { margin-left: 20px; }
+        li { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ AI Scam Detection - Test Console</h1>
+        
+        <div class="input-group">
+            <label for="message">Message to Analyze:</label>
+            <textarea id="message" placeholder="Enter a message to analyze...">Congratulations! You have won a prize. Click http://bit.ly/win now!</textarea>
+        </div>
+        
+        <div>
+            <button onclick="analyzeMessage()">Analyze</button>
+            <button onclick="loadSample('prize')">Sample: Prize Scam</button>
+            <button onclick="loadSample('account')">Sample: Account Alert</button>
+            <button onclick="loadSample('legitimate')">Sample: Legitimate</button>
+        </div>
+        
+        <div id="results" class="results">
+            <h3>📊 Analysis Results</h3>
+            <div id="resultsContent"></div>
+        </div>
+        
+        <div id="error" class="error" style="display:none;"></div>
+        <div id="success" class="success" style="display:none;"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api/analyze';
+        
+        function showError(msg) {
+            const el = document.getElementById('error');
+            el.textContent = '❌ ' + msg;
+            el.style.display = 'block';
+            document.getElementById('success').style.display = 'none';
+        }
+        
+        function showSuccess(msg) {
+            const el = document.getElementById('success');
+            el.textContent = '✅ ' + msg;
+            el.style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+        }
+        
+        function loadSample(type) {
+            const samples = {
+                prize: 'Congratulations! You have been selected to win a $5,000 prize. Click http://bit.ly/win now!',
+                account: 'Your account has been suspended. Verify your account immediately at http://fake-bank.example.com',
+                legitimate: 'Hey, are we still on for lunch tomorrow?'
+            };
+            document.getElementById('message').value = samples[type] || '';
+        }
+        
+        async function analyzeMessage() {
+            const message = document.getElementById('message').value.trim();
+            
+            if (!message) {
+                showError('Please enter a message');
+                return;
+            }
+            
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = 'Analyzing...';
+            
+            try {
+                console.log('Sending to:', API_URL);
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+                
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                displayResults(data);
+                showSuccess('Analysis complete');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError(error.message || 'Failed to analyze message');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Analyze';
+            }
+        }
+        
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('results');
+            const contentDiv = document.getElementById('resultsContent');
+            
+            const riskClass = data.risk_level === 'low' ? 'risk-low' : 
+                             data.risk_level === 'medium' ? 'risk-medium' :
+                             data.risk_level === 'high' ? 'risk-high' : 'risk-critical';
+            
+            const html = `
+                <p><strong>Risk Score:</strong> <span class="${riskClass}">${(data.risk_score * 100).toFixed(0)}%</span></p>
+                <p><strong>Risk Level:</strong> <span class="${riskClass}">${data.risk_level.toUpperCase()}</span></p>
+                <p><strong>Prediction:</strong> ${data.prediction.toUpperCase()}</p>
+                <p><strong>Confidence:</strong> ${(data.confidence * 100).toFixed(0)}%</p>
+                
+                ${data.alert ? `
+                    <h4 style="margin-top:15px; color:#d32f2f;">⚠️ Alert Generated</h4>
+                    <p><strong>${data.alert.title}</strong></p>
+                    <p>${data.alert.description}</p>
+                    ${data.alert.recommended_actions ? `
+                        <h4 style="margin-top:10px;">Recommended Actions:</h4>
+                        <ul>
+                            ${data.alert.recommended_actions.map(a => `<li>${a}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                ` : '<p style="color:#388e3c;">✅ No alert generated - message appears legitimate</p>'}
+                
+                ${data.risk_factors && data.risk_factors.length > 0 ? `
+                    <h4 style="margin-top:10px;">Risk Factors:</h4>
+                    <ul>
+                        ${data.risk_factors.map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                ` : ''}
+                
+                <h4 style="margin-top:15px;">Raw Response:</h4>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+            
+            contentDiv.innerHTML = html;
+            resultsDiv.classList.add('show');
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Auto-load first sample on page load
+        window.addEventListener('load', () => {
+            loadSample('prize');
+        });
+    </script>
+</body>
+</html>

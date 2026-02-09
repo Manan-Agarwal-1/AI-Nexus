@@ -1,0 +1,13 @@
+{
+  "name": "ai-nexus-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "serve -s ./public -l 3000",
+    "dev": "serve ./public -l 3000",
+    "test": "echo \"No frontend tests configured\" && exit 0"
+  },
+  "dependencies": {
+    "serve": "^14.0.1"
+  }
+}

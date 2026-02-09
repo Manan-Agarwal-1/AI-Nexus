@@ -1,12 +1,14 @@
-"""Models package for AI Scam Detection System."""
+"""Models package for AI Nexus.
 
-from .scam_classifier import ScamClassifier, train_classifier
-from .risk_scoring_model import RiskScoringModel
-from .anomaly_detection import AnomalyDetector
+This package avoids importing heavy ML dependencies at package import time.
+Modules in `src/models/` should be imported directly (for example:
+`from src.models.scam_classifier import ScamClassifier`) to keep imports lazy.
+"""
 
+# Export only the simple fallback model names so other modules can import
+# them specifically via their module path when needed.
 __all__ = [
-    'ScamClassifier',
-    'train_classifier',
-    'RiskScoringModel',
-    'AnomalyDetector'
+    'SimpleScamClassifier',
+    'SimpleRiskScoringModel',
+    'SimpleAnomalyDetector'
 ]

@@ -9,3 +9,98 @@ Traceback (most recent call last):
 ModuleNotFoundError: No module named 'numpy'
 [2026-02-08 17:14:56] WARNING [__main__.warning:72] Running API without trained models. Some endpoints will not work.
 [2026-02-08 17:14:56] INFO [__main__.info:68] Starting API server on 0.0.0.0:5000
+[2026-02-09 17:32:16] ERROR [__main__.error:76] Error loading models: No module named 'numpy'
+Traceback (most recent call last):
+  File "/workspaces/AI-Nexus/api/app.py", line 36, in load_models
+    from src.models.scam_classifier import ScamClassifier
+  File "/workspaces/AI-Nexus/src/models/__init__.py", line 3, in <module>
+    from .scam_classifier import ScamClassifier, train_classifier
+  File "/workspaces/AI-Nexus/src/models/scam_classifier.py", line 6, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+[2026-02-09 17:32:16] ERROR [__main__.error:76] Failed to initialize fallback models: No module named 'numpy'
+Traceback (most recent call last):
+  File "/workspaces/AI-Nexus/api/app.py", line 36, in load_models
+    from src.models.scam_classifier import ScamClassifier
+  File "/workspaces/AI-Nexus/src/models/__init__.py", line 3, in <module>
+    from .scam_classifier import ScamClassifier, train_classifier
+  File "/workspaces/AI-Nexus/src/models/scam_classifier.py", line 6, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspaces/AI-Nexus/api/app.py", line 90, in load_models
+    from src.models.simple_models import SimpleScamClassifier, SimpleRiskScoringModel, SimpleAnomalyDetector
+  File "/workspaces/AI-Nexus/src/models/__init__.py", line 3, in <module>
+    from .scam_classifier import ScamClassifier, train_classifier
+  File "/workspaces/AI-Nexus/src/models/scam_classifier.py", line 6, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+[2026-02-09 17:32:16] WARNING [__main__.warning:72] Running API without trained models. Some endpoints will not work.
+[2026-02-09 17:32:16] INFO [__main__.info:68] Starting API server on 0.0.0.0:5000
+[2026-02-09 17:33:45] INFO [__main__.info:68] No trained model found at models/saved_models/scam_classifier.pkl; initializing simple fallback models
+[2026-02-09 17:33:45] ERROR [__main__.error:76] Error loading models: No module named 'numpy'
+Traceback (most recent call last):
+  File "/workspaces/AI-Nexus/api/app.py", line 74, in load_models
+    from src.models.simple_models import SimpleScamClassifier, SimpleRiskScoringModel, SimpleAnomalyDetector
+  File "/workspaces/AI-Nexus/src/models/__init__.py", line 3, in <module>
+    from .scam_classifier import ScamClassifier, train_classifier
+  File "/workspaces/AI-Nexus/src/models/scam_classifier.py", line 6, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+[2026-02-09 17:33:45] WARNING [__main__.warning:72] Running API without trained models. Some endpoints will not work.
+[2026-02-09 17:33:45] INFO [__main__.info:68] Starting API server on 0.0.0.0:5000
+[2026-02-09 17:35:23] INFO [__main__.info:68] No trained model found at models/saved_models/scam_classifier.pkl; initializing simple fallback models
+[2026-02-09 17:35:23] ERROR [__main__.error:76] Error loading models: No module named 'nltk'
+Traceback (most recent call last):
+  File "/workspaces/AI-Nexus/api/app.py", line 74, in load_models
+    from src.models.simple_models import SimpleScamClassifier, SimpleRiskScoringModel, SimpleAnomalyDetector
+  File "/workspaces/AI-Nexus/src/models/simple_models.py", line 8, in <module>
+    from src.nlp_engine.intent_detection import IntentDetector
+  File "/workspaces/AI-Nexus/src/nlp_engine/__init__.py", line 3, in <module>
+    from .tokenizer import Tokenizer, tokenize
+  File "/workspaces/AI-Nexus/src/nlp_engine/tokenizer.py", line 6, in <module>
+    import nltk
+ModuleNotFoundError: No module named 'nltk'
+[2026-02-09 17:35:23] WARNING [__main__.warning:72] Running API without trained models. Some endpoints will not work.
+[2026-02-09 17:35:23] INFO [__main__.info:68] Starting API server on 0.0.0.0:5000
+[2026-02-09 17:36:59] INFO [__main__.info:68] No trained model found at models/saved_models/scam_classifier.pkl; initializing simple fallback models
+[2026-02-09 17:36:59] INFO [__main__.info:68] Initialized lightweight fallback models
+[2026-02-09 17:36:59] INFO [__main__.info:68] Starting API server on 0.0.0.0:5000
+[2026-02-09 17:38:54] INFO [__main__.info:68] No trained model found at models/saved_models/scam_classifier.pkl; initializing simple fallback models
+[2026-02-09 17:38:54] INFO [__main__.info:68] Initialized lightweight fallback models
+[2026-02-09 17:38:54] INFO [__main__.info:68] Starting API server on 0.0.0.0:5000
+[2026-02-09 17:43:23] INFO [src.decision_engine.alert_decision.info:68] Alert generated: ALERT-b35a01f2 - Priority: high
+[2026-02-09 17:43:23] INFO [__main__.info:68] Analyzed message unknown: critical risk
+[2026-02-09 17:46:00] INFO [__main__.info:68] Analyzed message unknown: low risk
+[2026-02-09 17:50:21] INFO [__main__.info:68] Analyzed message unknown: low risk
+[2026-02-09 17:51:40] INFO [__main__.info:68] Analyzed message unknown: medium risk
+[2026-02-09 17:51:46] INFO [src.decision_engine.alert_decision.info:68] Alert generated: ALERT-293bd096 - Priority: medium
+[2026-02-09 17:51:46] INFO [__main__.info:68] Analyzed message unknown: high risk
+[2026-02-09 18:03:27] INFO [__main__.info:68] No trained model found at models/saved_models/scam_classifier.pkl; initializing simple fallback models
+[2026-02-09 18:03:27] INFO [__main__.info:68] Initialized lightweight fallback models
+[2026-02-09 18:03:27] INFO [__main__.info:68] Starting API server on 0.0.0.0:5000
+[2026-02-09 18:06:06] INFO [__main__.info:68] Analyzed message unknown: low risk
+[2026-02-09 18:07:43] INFO [__main__.info:68] No trained model found at models/saved_models/scam_classifier.pkl; initializing simple fallback models
+[2026-02-09 18:07:43] INFO [__main__.info:68] Initialized lightweight fallback models
+[2026-02-09 18:07:43] INFO [__main__.info:68] Starting API server on 0.0.0.0:5000
+[2026-02-09 18:08:04] INFO [__main__.info:68] Analyzed message unknown: low risk
+[2026-02-09 18:08:24] INFO [__main__.info:68] No trained model found at models/saved_models/scam_classifier.pkl; initializing simple fallback models
+[2026-02-09 18:08:24] INFO [__main__.info:68] Initialized lightweight fallback models
+[2026-02-09 18:08:24] INFO [__main__.info:68] Starting API server on 0.0.0.0:5000
+[2026-02-09 18:08:47] INFO [__main__.info:68] Analyzed message unknown: low risk
+[2026-02-09 18:09:04] INFO [src.decision_engine.alert_decision.info:68] Alert generated: ALERT-2095ff3e - Priority: high
+[2026-02-09 18:09:04] INFO [__main__.info:68] Analyzed message unknown: critical risk
+[2026-02-09 18:14:27] INFO [src.decision_engine.alert_decision.info:68] Alert generated: ALERT-4ab35059 - Priority: critical
+[2026-02-09 18:14:27] INFO [__main__.info:68] Analyzed message unknown: critical risk
+[2026-02-09 18:16:24] INFO [src.decision_engine.alert_decision.info:68] Alert generated: ALERT-167be16e - Priority: critical
+[2026-02-09 18:16:24] INFO [__main__.info:68] Analyzed message unknown: critical risk
+[2026-02-09 18:26:14] INFO [src.decision_engine.alert_decision.info:68] Alert generated: ALERT-2baf131b - Priority: medium
+[2026-02-09 18:26:14] INFO [__main__.info:68] Analyzed message unknown: high risk
+[2026-02-09 18:27:15] INFO [src.decision_engine.alert_decision.info:68] Alert generated: ALERT-f9d8d5e6 - Priority: medium
+[2026-02-09 18:27:15] INFO [__main__.info:68] Analyzed message unknown: high risk
+[2026-02-09 18:36:37] INFO [__main__.info:68] No trained model found at models/saved_models/scam_classifier.pkl; initializing simple fallback models
+[2026-02-09 18:36:37] INFO [__main__.info:68] Initialized lightweight fallback models
+[2026-02-09 18:36:37] INFO [__main__.info:68] Starting API server on 0.0.0.0:5000

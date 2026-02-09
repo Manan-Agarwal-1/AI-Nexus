@@ -1,0 +1,26 @@
+{
+  "name": "AI-Nexus Scam Detection",
+  "image": "mcr.microsoft.com/devcontainers/universal:2-focal",
+  "forwardPorts": [3000, 5000],
+  "portsAttributes": {
+    "3000": {
+      "label": "Frontend",
+      "onAutoForward": "notify",
+      "requireLocalPort": true
+    },
+    "5000": {
+      "label": "Backend API",
+      "onAutoForward": "notify",
+      "requireLocalPort": true
+    }
+  },
+  "postCreateCommand": "python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ]
+    }
+  }
+}

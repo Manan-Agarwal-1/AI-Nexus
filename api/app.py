@@ -16,7 +16,15 @@ from src.utils.config_loader import get_config
 
 # Initialize
 app = Flask(__name__)
-CORS(app)
+# Enable CORS for all origins in development
+CORS(app, resources={
+    r"/api/*": {
+        "origins": "*",
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"],
+        "send_wildcard": True
+    }
+})
 logger = get_logger(__name__)
 config = get_config()
 
@@ -31,46 +39,59 @@ def load_models():
     """Load all trained models."""
     global classifier, risk_model, alert_engine, anomaly_detector
     
+    # Decide based on presence of a saved model file whether to load full ML stack
     try:
-        # Import heavy ML modules lazily to allow starting the API
-        # without installing all ML dependencies.
-        from src.models.scam_classifier import ScamClassifier
-        from src.models.risk_scoring_model import RiskScoringModel
-        from src.models.anomaly_detection import AnomalyDetector
-        from src.decision_engine.alert_decision import AlertDecisionEngine
-        from src.nlp_engine.sentiment_analysis import SentimentAnalyzer
-        from src.nlp_engine.intent_detection import IntentDetector
-
         model_path = Path(config.MODEL_PATH) / 'scam_classifier.pkl'
+
         if model_path.exists():
+            # Only import heavy modules if we actually have model artifacts
+            from src.models.scam_classifier import ScamClassifier
+            from src.models.risk_scoring_model import RiskScoringModel
+            from src.models.anomaly_detection import AnomalyDetector
+            from src.decision_engine.alert_decision import AlertDecisionEngine
+            from src.nlp_engine.sentiment_analysis import SentimentAnalyzer
+            from src.nlp_engine.intent_detection import IntentDetector
+
             classifier = ScamClassifier.load(str(model_path))
             logger.info("Scam classifier loaded successfully")
+
+            # Initialize risk model using the full stack
+            sentiment_analyzer = SentimentAnalyzer()
+            intent_detector = IntentDetector()
+            risk_model = RiskScoringModel(
+                classifier=classifier,
+                sentiment_analyzer=sentiment_analyzer,
+                intent_detector=intent_detector
+            )
+
+            # Initialize alert engine
+            alert_engine = AlertDecisionEngine()
+
+            # Load anomaly detector if available
+            if config.ENABLE_ANOMALY_DETECTION:
+                anomaly_path = Path(config.MODEL_PATH) / 'anomaly_detector.pkl'
+                if anomaly_path.exists():
+                    anomaly_detector = AnomalyDetector.load(str(anomaly_path))
+                    logger.info("Anomaly detector loaded successfully")
+
+            return True
+
         else:
-            logger.warning(f"Model file not found: {model_path}")
-            logger.warning("Please train the model first using: python src/training/train_model.py")
-            return False
-        
-        # Initialize risk model
-        sentiment_analyzer = SentimentAnalyzer()
-        intent_detector = IntentDetector()
-        risk_model = RiskScoringModel(
-            classifier=classifier,
-            sentiment_analyzer=sentiment_analyzer,
-            intent_detector=intent_detector
-        )
-        
-        # Initialize alert engine
-        alert_engine = AlertDecisionEngine()
-        
-        # Load anomaly detector if available
-        if config.ENABLE_ANOMALY_DETECTION:
-            anomaly_path = Path(config.MODEL_PATH) / 'anomaly_detector.pkl'
-            if anomaly_path.exists():
-                anomaly_detector = AnomalyDetector.load(str(anomaly_path))
-                logger.info("Anomaly detector loaded successfully")
-        
-        return True
-        
+            # No trained models found — use lightweight fallbacks (no heavy imports)
+            logger.info(f"No trained model found at {model_path}; initializing simple fallback models")
+            from src.models.simple_models import SimpleScamClassifier, SimpleRiskScoringModel, SimpleAnomalyDetector
+            from src.decision_engine.alert_decision import AlertDecisionEngine
+            from src.nlp_engine.intent_detection import IntentDetector
+
+            classifier = SimpleScamClassifier()
+            intent_detector = IntentDetector()
+            risk_model = SimpleRiskScoringModel(classifier=classifier, intent_detector=intent_detector)
+            alert_engine = AlertDecisionEngine()
+            anomaly_detector = SimpleAnomalyDetector() if config.ENABLE_ANOMALY_DETECTION else None
+
+            logger.info("Initialized lightweight fallback models")
+            return True
+
     except Exception as e:
         logger.error(f"Error loading models: {e}", exc_info=True)
         return False
@@ -251,6 +272,41 @@ def get_statistics():
     except Exception as e:
         logger.error(f"Error getting statistics: {e}", exc_info=True)
         return jsonify({'error': str(e)}), 500
+
+
+# Root route for convenience (helps avoid 404 when visiting base URL)
+@app.route('/', methods=['GET'])
+def index():
+    """Simple index page with links to API and frontend."""
+    frontend_url = f"http://localhost:3000"
+    return jsonify({
+        'service': 'AI-Nexus Scam Detection API',
+        'message': 'Use the frontend or API endpoints.',
+        'frontend': frontend_url,
+        'health': '/api/health',
+        'docs': '/api/stats'
+    })
+
+
+@app.errorhandler(404)
+def handle_404(err):
+    """Return helpful message for missing routes."""
+    if request.path.startswith('/api'):
+        return jsonify({
+            'error': 'Endpoint not found',
+            'available_endpoints': [
+                '/api/health',
+                '/api/analyze',
+                '/api/batch',
+                '/api/feedback',
+                '/api/stats'
+            ]
+        }), 404
+    # For non-API requests, point users to the frontend
+    return (f"<html><body><h2>AI-Nexus</h2>"
+            f"<p>Frontend available at <a href=\"http://localhost:3000\">http://localhost:3000</a></p>"
+            f"<p>API health: <a href=\"/api/health\">/api/health</a></p>"
+            f"</body></html>"), 404
 
 
 if __name__ == '__main__':

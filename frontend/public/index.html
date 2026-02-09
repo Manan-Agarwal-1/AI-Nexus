@@ -3,8 +3,330 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Scam Detection System</title>
-    <link rel="stylesheet" href="src/styles/main.css">
+    <title>AI Scam Detection System | Detect Scams Instantly</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        main {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 20px;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-section h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            margin-top: 15px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-right: 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 600;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .sample-btn {
+            background: #6c757d;
+            font-size: 14px;
+            padding: 12px 20px;
+        }
+
+        .error-message {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 10px;
+            color: #721c24;
+            display: none;
+            font-weight: 500;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 2px solid #e0e0e0;
+            display: none;
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .alert {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid;
+        }
+
+        .alert h3 {
+            margin-bottom: 10px;
+        }
+
+        .alert-high {
+            background: #f8d7da;
+            border-color: #f44336;
+            color: #721c24;
+        }
+
+        .alert-critical {
+            background: #f8d7da;
+            border-color: #d32f2f;
+            color: #721c24;
+            animation: pulse 2s infinite;
+        }
+
+        .alert-medium {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .result-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .risk-level {
+            margin-top: 10px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .risk-low {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .risk-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .risk-high {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .risk-critical {
+            background: #dc3545;
+            color: white;
+        }
+
+        .prediction {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .prediction-scam {
+            color: #dc3545;
+        }
+
+        .prediction-legitimate {
+            color: #28a745;
+        }
+
+        .confidence {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .risk-factors, .recommendations {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .risk-factors h3, .recommendations h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .risk-factors ul, .recommendations ul {
+            list-style-position: inside;
+            line-height: 2;
+        }
+
+        .risk-factors li {
+            color: #dc3545;
+        }
+
+        .recommendations li {
+            color: #28a745;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            .result-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -19,25 +341,31 @@
                 <textarea id="messageInput" 
                           placeholder="Paste the suspicious message here..."
                           rows="6"></textarea>
-                <button id="analyzeBtn" onclick="analyzeMessage()">Analyze Message</button>
+                <div class="button-group">
+                    <button id="analyzeBtn" onclick="analyzeMessage()">Analyze Message</button>
+                    <button class="sample-btn" onclick="setSample('Congratulations! You have been selected to win a $5,000 prize. Click http://bit.ly/win now!')">Sample: Prize</button>
+                    <button class="sample-btn" onclick="setSample('Your account has been suspended. Verify your account immediately at http://fake-bank.example.com')">Sample: Account</button>
+                    <button class="sample-btn" onclick="setSample('Hey, are we still on for lunch tomorrow?')">Sample: Legitimate</button>
+                </div>
+                <div id="errorMessage" class="error-message"></div>
             </div>
 
-            <div id="results" class="results-section" style="display: none;">
+            <div id="results" class="results-section">
                 <h2>Analysis Results</h2>
                 
-                <div id="alert" class="alert"></div>
+                <div id="alert" class="alert" style="display:none;"></div>
                 
                 <div class="result-cards">
                     <div class="card">
                         <h3>Risk Score</h3>
-                        <div id="riskScore" class="score"></div>
-                        <div id="riskLevel" class="risk-level"></div>
+                        <div id="riskScore" class="score">-</div>
+                        <div id="riskLevel" class="risk-level">-</div>
                     </div>
                     
                     <div class="card">
                         <h3>Prediction</h3>
-                        <div id="prediction" class="prediction"></div>
-                        <div id="confidence" class="confidence"></div>
+                        <div id="prediction" class="prediction">-</div>
+                        <div id="confidence" class="confidence">-</div>
                     </div>
                 </div>
 
@@ -52,6 +380,252 @@
         </footer>
     </div>
 
-    <script src="src/App.js"></script>
+    <script>
+        // ============================================
+        // ROBUST API URL DETECTION FOR ALL ENVIRONMENTS
+        // ============================================
+        
+        let API_BASE_URL = 'http://localhost:5000/api';
+        let ENVIRONMENT_TYPE = 'LOCAL';
+        
+        // Detect if we're in GitHub Codespaces or remote environment
+        const hostname = window.location.hostname;
+        const protocol = window.location.protocol;
+        
+        console.log('🔍 Environment Detection:');
+        console.log('  Hostname:', hostname);
+        console.log('  Protocol:', protocol);
+        
+        if (hostname.includes('github.dev')) {
+            // GitHub Codespaces environment
+            ENVIRONMENT_TYPE = 'GITHUB_CODESPACES';
+            
+            // Extract the base part of the hostname (e.g., "zany-parakeet-pjwq9wg69g6g36p5q")
+            // from "zany-parakeet-pjwq9wg69g6g36p5q-3000.app.github.dev"
+            const parts = hostname.split('-');
+            // Find the index where the port number is (e.g., "3000")
+            let baseHostname = hostname;
+            if (hostname.includes('-3000.')) {
+                baseHostname = hostname.replace('-3000.', '-5000.');
+            } else if (hostname.includes('-8000.')) {
+                baseHostname = hostname.replace('-8000.', '-5000.');
+            } else if (hostname.includes('-8080.')) {
+                baseHostname = hostname.replace('-8080.', '-5000.');
+            }
+            
+            API_BASE_URL = protocol + '//' + baseHostname + '/api';
+            console.log('✅ Codespaces detected');
+        } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            ENVIRONMENT_TYPE = 'LOCAL_DEVELOPMENT';
+            API_BASE_URL = 'http://localhost:5000/api';
+            console.log('✅ Local development detected');
+        } else {
+            // Other remote environment (fallback)
+            ENVIRONMENT_TYPE = 'REMOTE_OTHER';
+            API_BASE_URL = protocol + '//' + hostname + ':5000/api';
+            console.log('⚠️ Other remote environment detected, using port 5000');
+        }
+        
+        console.log('🎯 API URL will be:', API_BASE_URL);
+        console.log('📍 Environment:', ENVIRONMENT_TYPE);
+
+        function showError(msg) {
+            console.warn('SHOWING ERROR:', msg);
+            const el = document.getElementById('errorMessage');
+            if (!el) {
+                console.error('ERROR: errorMessage element not found!');
+                alert('Error: ' + msg);
+                return;
+            }
+            el.textContent = '❌ ' + msg;
+            el.classList.add('show');
+        }
+
+        function hideError() {
+            const el = document.getElementById('errorMessage');
+            if (el) {
+                el.classList.remove('show');
+            }
+        }
+
+        function setSample(text) {
+            const input = document.getElementById('messageInput');
+            input.value = text;
+            input.focus();
+        }
+
+        async function analyzeMessage() {
+            console.log('\n========================================');
+            console.log('🚀 ANALYZE MESSAGE INITIATED');
+            console.log('========================================');
+            
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            
+            if (!message) {
+                showError('Please enter a message to analyze');
+                return;
+            }
+            
+            hideError();
+            
+            const btn = document.getElementById('analyzeBtn');
+            btn.disabled = true;
+            btn.textContent = 'Analyzing...';
+            
+            try {
+                const url = `${API_BASE_URL}/analyze`;
+                const payload = { message };
+                
+                console.log('📤 Request Details:');
+                console.log('   URL:', url);
+                console.log('   Environment:', ENVIRONMENT_TYPE);
+                console.log('   Message length:', message.length, 'characters');
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                    mode: 'cors',
+                    credentials: 'omit'
+                });
+                
+                console.log('📥 Response Received:');
+                console.log('   Status:', response.status);
+                console.log('   Status Text:', response.statusText);
+                console.log('   CORS Header:', response.headers.get('access-control-allow-origin'));
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Server Error:', response.status, errorText);
+                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ Successfully parsed response:', data);
+                
+                displayResults(data);
+                
+            } catch (error) {
+                console.error('\n❌ ERROR DETAILS:');
+                console.error('   Type:', error.constructor.name);
+                console.error('   Message:', error.message);
+                console.error('   Stack:', error.stack);
+                
+                let errorMsg = 'Error analyzing message. ';
+                
+                if (error instanceof TypeError) {
+                    if (error.message.includes('Failed to fetch')) {
+                        errorMsg += `Cannot connect to API at: ${API_BASE_URL}/analyze. `;
+                        if (ENVIRONMENT_TYPE === 'GITHUB_CODESPACES') {
+                            errorMsg += 'Running in Codespaces. ';
+                        }
+                        errorMsg += 'Backend may not be running on port 5000.';
+                    } else {
+                        errorMsg += 'Network error: ' + error.message;
+                    }
+                } else if (error instanceof SyntaxError) {
+                    errorMsg += 'Invalid response format from API.';
+                } else {
+                    errorMsg += error.message;
+                }
+                
+                showError(errorMsg);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Analyze Message';
+            }
+        }
+
+        function displayResults(data) {
+            console.log('=== DISPLAYING RESULTS ===');
+            
+            if (!data) {
+                showError('No data received from API');
+                return;
+            }
+            
+            const resultsSection = document.getElementById('results');
+            const alertDiv = document.getElementById('alert');
+            const riskScoreEl = document.getElementById('riskScore');
+            const riskLevelEl = document.getElementById('riskLevel');
+            const predictionEl = document.getElementById('prediction');
+            const confidenceEl = document.getElementById('confidence');
+            const riskFactorsDiv = document.getElementById('riskFactors');
+            const recommendationsDiv = document.getElementById('recommendations');
+            
+            // Check all required elements exist
+            if (!resultsSection) {
+                console.error('ERROR: Missing results-section');
+                return;
+            }
+            if (!riskScoreEl || !predictionEl) {
+                console.error('ERROR: Missing result display elements');
+                return;
+            }
+            
+            // Display alert if present
+            if (data.alert && data.alert.priority) {
+                alertDiv.className = `alert alert-${data.alert.priority}`;
+                alertDiv.innerHTML = `<h3>${data.alert.title || 'Alert'}</h3><p>${data.alert.description || 'Potential scam detected'}</p>`;
+                alertDiv.style.display = 'block';
+                console.log('Alert displayed:', data.alert.title);
+            } else {
+                alertDiv.style.display = 'none';
+            }
+            
+            // Display risk score
+            const riskScore = Math.round((data.risk_score || 0) * 100);
+            riskScoreEl.textContent = riskScore + '%';
+            console.log('Risk score:', riskScore + '%');
+            
+            // Display risk level with appropriate class
+            const riskLevel = data.risk_level || 'unknown';
+            riskLevelEl.textContent = riskLevel.toUpperCase();
+            riskLevelEl.className = `risk-level risk-${riskLevel}`;
+            
+            // Display prediction
+            const prediction = data.prediction || 'unknown';
+            predictionEl.textContent = prediction.toUpperCase();
+            predictionEl.className = `prediction prediction-${prediction}`;
+            console.log('Prediction:', prediction);
+            
+            // Display confidence
+            const confidence = Math.round((data.confidence || 0) * 100);
+            confidenceEl.textContent = 'Confidence: ' + confidence + '%';
+            
+            // Display risk factors
+            if (data.risk_factors && data.risk_factors.length > 0) {
+                riskFactorsDiv.innerHTML = '<h3>⚠️ Risk Factors Detected</h3><ul>' +
+                    data.risk_factors.map(factor => '<li>' + factor + '</li>').join('') +
+                    '</ul>';
+            } else {
+                riskFactorsDiv.innerHTML = '<p>No specific risk factors detected.</p>';
+            }
+            
+            // Display recommendations
+            if (data.alert && data.alert.recommended_actions && data.alert.recommended_actions.length > 0) {
+                recommendationsDiv.innerHTML = '<h3>✅ Recommended Actions</h3><ul>' +
+                    data.alert.recommended_actions.map(action => '<li>' + action + '</li>').join('') +
+                    '</ul>';
+            } else {
+                recommendationsDiv.innerHTML = '';
+            }
+            
+            // Show results section
+            resultsSection.classList.add('show');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+            console.log('Results displayed successfully');
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('\n✅ PAGE READY');
+            console.log('   API Base URL:', API_BASE_URL);
+            console.log('   Environment:', ENVIRONMENT_TYPE);
+        });
+    </script>
 </body>
 </html>

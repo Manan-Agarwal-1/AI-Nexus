@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>API Connection Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #f0f0f0; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        h1 { color: #333; }
+        .test-item { margin: 15px 0; padding: 10px; border-left: 3px solid #ccc; }
+        .test-item.pass { border-color: #28a745; background: #d4edda; }
+        .test-item.fail { border-color: #dc3545; background: #f8d7da; }
+        .test-item.info { border-color: #17a2b8; background: #d1ecf1; }
+        code { background: #eee; padding: 2px 5px; border-radius: 3px; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 API Connection Test</h1>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+        
+        function addResult(title, status, message, details = '') {
+            const className = status === 'pass' ? 'pass' : status === 'fail' ? 'fail' : 'info';
+            const icon = status === 'pass' ? '✅' : status === 'fail' ? '❌' : 'ℹ️';
+            
+            const html = `
+                <div class="test-item ${className}">
+                    <strong>${icon} ${title}</strong>
+                    <p>${message}</p>
+                    ${details ? '<pre>' + details + '</pre>' : ''}
+                </div>
+            `;
+            resultsDiv.innerHTML += html;
+        }
+
+        async function runTests() {
+            addResult('Environment Detection', 'info', 
+                `Hostname: ${window.location.hostname}`,
+                `Protocol: ${window.location.protocol}\nFull URL: ${window.location.href}`);
+
+            // Determine API URL
+            let API_BASE_URL = 'http://localhost:5000/api';
+            if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                const protocol = window.location.protocol;
+                let hostname = window.location.hostname;
+                
+                if (hostname.includes('-3000.')) {
+                    hostname = hostname.replace('-3000.', '-5000.');
+                }
+                API_BASE_URL = protocol + '//' + hostname + '/api';
+            }
+
+            addResult('Computed API URL', 'info',
+                `API will connect to: ${API_BASE_URL}`,
+                `Full health check URL: ${API_BASE_URL}/health`);
+
+            // Test 1: Health Check
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'omit'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult('Health Check', 'pass', 
+                        `Backend is responsive!`,
+                        JSON.stringify(data, null, 2));
+                } else {
+                    addResult('Health Check', 'fail',
+                        `Status: ${response.status} ${response.statusText}`,
+                        `Headers: ${JSON.stringify({
+                            contentType: response.headers.get('content-type'),
+                            cors: response.headers.get('access-control-allow-origin')
+                        }, null, 2)}`);
+                }
+            } catch (e) {
+                addResult('Health Check', 'fail',
+                    `Cannot connect to backend: ${e.message}`,
+                    `This typically means:\n1. Backend not running\n2. Wrong URL being used\n3. CORS issue\n\nError: ${e.stack}`);
+            }
+
+            // Test 2: Analyze Endpoint
+            try {
+                const payload = {
+                    message: 'Your bank account has been suspended due to suspicious activity. Verify your account now by logging in here: http://fakebank-verify.com'
+                };
+
+                const response = await fetch(`${API_BASE_URL}/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                    mode: 'cors',
+                    credentials: 'omit'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult('Analyze Endpoint', 'pass',
+                        `Message analyzed successfully!`,
+                        `Risk Level: ${data.risk_level}\nRisk Score: ${data.risk_score}\nPrediction: ${data.prediction}`);
+                } else {
+                    addResult('Analyze Endpoint', 'fail',
+                        `Status: ${response.status} ${response.statusText}`);
+                }
+            } catch (e) {
+                addResult('Analyze Endpoint', 'fail',
+                    `Cannot reach analyze endpoint: ${e.message}`);
+            }
+
+            addResult('Next Steps', 'info',
+                'If all tests pass, the application should work in the main interface.',
+                'If tests fail:\n1. Make sure both servers are running\n2. Check the backend logs\n3. Verify CORS is properly configured');
+        }
+
+        // Run tests when page loads
+        window.addEventListener('load', runTests);
+        addResult('Status', 'info', 'Running tests...', 'Please wait while we test the API connection.');
+    </script>
+</body>
+</html>

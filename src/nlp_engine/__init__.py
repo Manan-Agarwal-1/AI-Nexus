@@ -1,14 +1,18 @@
-"""NLP engine package for AI Scam Detection System."""
+"""NLP engine package.
 
-from .tokenizer import Tokenizer, tokenize
-from .sentiment_analysis import SentimentAnalyzer, analyze_sentiment
-from .intent_detection import IntentDetector, detect_intent
+Avoid importing heavy NLP dependencies at package import time. Import
+submodules directly when needed, for example:
+
+    from src.nlp_engine.intent_detection import IntentDetector
+
+This keeps startup lightweight in development environments.
+"""
 
 __all__ = [
+    'IntentDetector',
+    'detect_intent',
     'Tokenizer',
     'tokenize',
     'SentimentAnalyzer',
-    'analyze_sentiment',
-    'IntentDetector',
-    'detect_intent'
+    'analyze_sentiment'
 ]
